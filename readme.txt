@@ -7,6 +7,7 @@ Tested up to: 6.8.3
 Requires PHP: 8.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Donate link: https://www.paypal.com/donate/?hosted_button_id=DTRF9JZ6CMJLQ
 
 Allow anonymous users to preview a draft of a post before it is published.
 
