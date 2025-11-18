@@ -1,0 +1,11 @@
+# OS junk files
+[Tt]humbs.db
+*.DS_Store
+
+# Editor directories
+.vscode/
+.idea/
+
+# Node/Composer (if you ever use them later)
+node_modules/
+vendor/
