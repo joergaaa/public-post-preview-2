@@ -1,6 +1,6 @@
 === Public Post Preview ===
 Contributors: joerga, ocean90
-Tags: public, preview, posts, anonymous, drafts, sharing, collaboration
+Tags: public, preview, posts, drafts, sharing
 Stable tag: 4.0.0
 Requires at least: 6.5
 Tested up to: 6.8.3
