@@ -92,7 +92,7 @@ class DS_Public_Post_Preview {
 			array(
 				'show_in_rest' => true,
 				'type'         => 'integer',
-				'description'  => __( 'Default expiration time in seconds.', 'public-post-preview' ),
+				'description'  => __( 'Default expiration time in seconds.', 'public-post-preview-2' ),
 				'default'      => 48,
 			)
 		);
@@ -115,19 +115,19 @@ class DS_Public_Post_Preview {
 
 		add_settings_section(
 			'public_post_preview',
-			__( 'Public Post Preview', 'public-post-preview' ),
+			__( 'Public Post Preview', 'public-post-preview-2' ),
 			'__return_false',
 			'reading'
 		);
 
 		add_settings_field(
 			'public_post_preview_expiration_time',
-			__( 'Expiration Time', 'public-post-preview' ),
+			__( 'Expiration Time', 'public-post-preview-2' ),
 			static function() {
 				$value = get_option( 'public_post_preview_expiration_time' );
 				?>
-				<input type="number" id="public-post-preview-expiration-time" name="public_post_preview_expiration_time" value="<?php echo esc_attr( $value ); ?>" class="small-text" step="1" min="1" /> <?php _e( 'hours', 'public-post-preview' ); ?>
-				<p class="description"><?php _e( 'Default expiration time of a preview link in hours.', 'public-post-preview' ); ?></p>
+				<input type="number" id="public-post-preview-expiration-time" name="public_post_preview_expiration_time" value="<?php echo esc_attr( $value ); ?>" class="small-text" step="1" min="1" /> <?php esc_html_e( 'hours', 'public-post-preview-2' ); ?>
+				<p class="description"><?php esc_html_e( 'Default expiration time of a preview link in hours.', 'public-post-preview-2' ); ?></p>
 				<?php
 			},
 			'reading',
@@ -166,7 +166,7 @@ class DS_Public_Post_Preview {
 				true
 			);
 
-			wp_set_script_translations( 'public-post-preview-gutenberg', 'public-post-preview' );
+			wp_set_script_translations( 'public-post-preview-gutenberg', 'public-post-preview-2' );
 
 			$post            = get_post();
 			$preview_enabled = self::is_public_preview_enabled( $post );
@@ -194,8 +194,8 @@ class DS_Public_Post_Preview {
 				'public-post-preview',
 				'DSPublicPostPreviewL10n',
 				array(
-					'enabled'  => __( 'Enabled!', 'public-post-preview' ),
-					'disabled' => __( 'Disabled!', 'public-post-preview' ),
+					'enabled'  => __( 'Enabled!', 'public-post-preview-2' ),
+					'disabled' => __( 'Disabled!', 'public-post-preview-2' ),
 				)
 			);
 		}
@@ -214,12 +214,12 @@ class DS_Public_Post_Preview {
 		if ( in_array( (int) $post->ID, self::get_preview_post_ids(), true ) ) {
 			$post_states['ppp_enabled'] = sprintf(
 				' %s&nbsp;<a href="%s" target="_blank" aria-label="%s"><span class="dashicons dashicons-format-links" aria-hidden="true"></span></a>',
-				__( 'Public Preview', 'public-post-preview' ),
+				__( 'Public Preview', 'public-post-preview-2' ),
 				esc_url( self::get_preview_link( $post ) ),
 				esc_attr(
 					sprintf(
 						/* translators: %s: Post title */
-						__( 'Open public preview of &#8220;%s&#8221;', 'public-post-preview' ), _draft_or_post_title( $post )
+						__( 'Open public preview of &#8220;%s&#8221;', 'public-post-preview-2' ), _draft_or_post_title( $post )
 					)
 				)
 			);
@@ -262,13 +262,14 @@ class DS_Public_Post_Preview {
 		}
 
 		// Sanitize GET input.
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Public query parameter, no nonce needed.
 		$public_preview = isset( $_GET['public_preview'] ) ? sanitize_key( wp_unslash( $_GET['public_preview'] ) ) : '';
 
 		$views['public_preview'] = sprintf(
 			'<a href="%s"%s>%s <span class="count">(%s)</span></a>',
 			esc_url( add_query_arg( array( 'post_type' => $post_type, 'public_preview' => 1 ), 'edit.php' ) ),
 			'1' === $public_preview ? ' class="current"  aria-current="page"' : '',
-			__( 'Public Preview', 'public-post-preview' ),
+			__( 'Public Preview', 'public-post-preview-2' ),
 			number_format_i18n( $query->post_count )
 		);
 
@@ -288,6 +289,7 @@ class DS_Public_Post_Preview {
 		}
 
 		// Sanitize GET input.
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Public query parameter, no nonce needed.
 		$public_preview = isset( $_GET['public_preview'] ) ? sanitize_key( wp_unslash( $_GET['public_preview'] ) ) : '';
 
 		if ( '1' === $public_preview ) {
@@ -310,7 +312,8 @@ class DS_Public_Post_Preview {
 	 */
 	public static function user_switching_redirect_to( $redirect_to, $redirect_type, $new_user, $old_user ) {
 		// Sanitize GET input.
-		$post_id = isset( $_GET['redirect_to_post'] ) ? absint( $_GET['redirect_to_post'] ) : 0;
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Public query parameter from User Switching plugin, no nonce needed.
+		$post_id = isset( $_GET['redirect_to_post'] ) ? absint( wp_unslash( $_GET['redirect_to_post'] ) ) : 0;
 
 		if ( ! $post_id ) {
 			return $redirect_to;
@@ -413,12 +416,12 @@ class DS_Public_Post_Preview {
 		$enabled = self::is_public_preview_enabled( $post );
 		?>
 		<label><input type="checkbox"<?php checked( $enabled ); ?> name="public_post_preview" id="public-post-preview" value="1" />
-		<?php _e( 'Enable public preview', 'public-post-preview' ); ?> <span id="public-post-preview-ajax"></span></label>
+		<?php esc_html_e( 'Enable public preview', 'public-post-preview-2' ); ?> <span id="public-post-preview-ajax"></span></label>
 
 		<div id="public-post-preview-link" style="margin-top:6px"<?php echo $enabled ? '' : ' class="hidden"'; ?>>
 			<label>
 				<input type="text" name="public_post_preview_link" class="regular-text" value="<?php echo esc_attr( $enabled ? self::get_preview_link( $post ) : '' ); ?>" style="width:99%" readonly />
-				<span class="description"><?php _e( 'Copy and share this preview URL.', 'public-post-preview' ); ?></span>
+				<span class="description"><?php esc_html_e( 'Copy and share this preview URL.', 'public-post-preview-2' ); ?></span>
 			</label>
 		</div>
 		<?php
@@ -494,7 +497,9 @@ class DS_Public_Post_Preview {
 			return false;
 		}
 
-		if ( empty( $_POST['public_post_preview_wpnonce'] ) || ! wp_verify_nonce( $_POST['public_post_preview_wpnonce'], 'public-post-preview_' . $post_id ) ) {
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Nonce is verified in the next line. Nonces don't need sanitization, only verification.
+		$nonce = isset( $_POST['public_post_preview_wpnonce'] ) ? wp_unslash( $_POST['public_post_preview_wpnonce'] ) : '';
+		if ( empty( $nonce ) || ! wp_verify_nonce( $nonce, 'public-post-preview_' . $post_id ) ) {
 			return false;
 		}
 
@@ -680,7 +685,8 @@ class DS_Public_Post_Preview {
 			self::log_preview_debug(
 				'show_public_preview:activated',
 				array(
-					'request'            => $_SERVER['REQUEST_URI'] ?? '',
+					// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Debug logging only, server variable.
+					'request'            => isset( $_SERVER['REQUEST_URI'] ) ? esc_url_raw( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '',
 					'tagdiv_filter_removed' => $removed_tagdiv_filter,
 				)
 			);
@@ -715,11 +721,11 @@ class DS_Public_Post_Preview {
 		}
 
 		if ( ! self::verify_nonce( get_query_var( '_ppp' ), 'public_post_preview_' . $post_id ) ) {
-			wp_die( __( 'This link has expired!', 'public-post-preview' ), 403 );
+			wp_die( esc_html( __( 'This link has expired!', 'public-post-preview-2' ) ), 403 );
 		}
 
 		if ( ! in_array( $post_id, self::get_preview_post_ids(), true ) ) {
-			wp_die( __( 'No public preview available!', 'public-post-preview' ), 404 );
+			wp_die( esc_html( __( 'No public preview available!', 'public-post-preview-2' ) ), 404 );
 		}
 
 		return true;
@@ -781,7 +787,8 @@ class DS_Public_Post_Preview {
 				'query_vars' => $query instanceof WP_Query ? $query->query_vars : null,
 				'_ppp'       => get_query_var( '_ppp' ),
 				'preview_id' => $preview_post_id,
-				'request'    => $_SERVER['REQUEST_URI'] ?? '',
+				// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Debug logging only, server variable.
+				'request'    => isset( $_SERVER['REQUEST_URI'] ) ? esc_url_raw( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '',
 			)
 		);
 
@@ -804,9 +811,12 @@ class DS_Public_Post_Preview {
 				array(
 					'query_vars' => $query instanceof WP_Query ? $query->query_vars : null,
 					'get'        => array(
-						'p'       => isset( $_GET['p'] ) ? (int) $_GET['p'] : null,
-						'page_id' => isset( $_GET['page_id'] ) ? (int) $_GET['page_id'] : null,
-						'post_id' => isset( $_GET['post_id'] ) ? (int) $_GET['post_id'] : null,
+						// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Debug logging only, values are sanitized.
+						'p'       => isset( $_GET['p'] ) ? absint( wp_unslash( $_GET['p'] ) ) : null,
+						// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Debug logging only, values are sanitized.
+						'page_id' => isset( $_GET['page_id'] ) ? absint( wp_unslash( $_GET['page_id'] ) ) : null,
+						// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Debug logging only, values are sanitized.
+						'post_id' => isset( $_GET['post_id'] ) ? absint( wp_unslash( $_GET['post_id'] ) ) : null,
 					),
 				)
 			);
@@ -839,7 +849,8 @@ class DS_Public_Post_Preview {
 			self::$tagdiv_deferred_preview = array(
 				'preview_post' => $preview_post,
 				'query'        => $query,
-				'request'      => $_SERVER['REQUEST_URI'] ?? '',
+				// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Debug logging only, server variable.
+				'request'      => isset( $_SERVER['REQUEST_URI'] ) ? esc_url_raw( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '',
 			);
 
 			add_action( 'template_redirect', array( __CLASS__, 'complete_deferred_preview_swap' ), 20 );
@@ -901,10 +912,12 @@ class DS_Public_Post_Preview {
 	private static function prime_tagdiv_preview_request( WP_Post $preview_post ) {
 		$preview_id = (int) $preview_post->ID;
 
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Setting value for TagDiv compatibility, not reading user input.
 		if ( ! isset( $_GET['td_preview_post_id'] ) ) {
 			$_GET['td_preview_post_id'] = $preview_id;
 		}
 
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Setting value for TagDiv compatibility, not reading user input.
 		if ( ! isset( $_REQUEST['td_preview_post_id'] ) ) {
 			$_REQUEST['td_preview_post_id'] = $preview_id;
 		}
@@ -1384,10 +1397,12 @@ class DS_Public_Post_Preview {
 		$log_file = plugin_dir_path( __FILE__ ) . 'preview-debug.log';
 		$log_dir  = dirname( $log_file );
 
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_is_writable -- Direct filesystem access needed for debug logging.
 		if ( ! is_dir( $log_dir ) || ! is_writable( $log_dir ) ) {
 			return;
 		}
 
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_is_writable -- Direct filesystem access needed for debug logging.
 		if ( file_exists( $log_file ) && ! is_writable( $log_file ) ) {
 			return;
 		}
@@ -1399,6 +1414,7 @@ class DS_Public_Post_Preview {
 			empty( $context ) ? '' : wp_json_encode( $context )
 		);
 
+		// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- Debug logging functionality.
 		error_log( $entry, 3, $log_file );
 	}
 

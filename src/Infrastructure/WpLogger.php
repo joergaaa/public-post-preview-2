@@ -59,9 +59,12 @@ class WpLogger implements LoggerInterface {
 			empty( $context ) ? '' : wp_json_encode( $context )
 		);
 
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_is_writable -- Direct filesystem access needed for debug logging.
 		if ( $this->log_file && is_writable( dirname( $this->log_file ) ) ) {
+			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_file_put_contents -- Direct filesystem access needed for debug logging.
 			file_put_contents( $this->log_file, $entry . PHP_EOL, FILE_APPEND );
 		} else {
+			// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- Fallback logging when file write fails.
 			error_log( $entry );
 		}
 	}
