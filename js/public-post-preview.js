@@ -1,6 +1,6 @@
 /* eslint-disable no-var, object-shorthand */
 ( function ( $, ajaxurl, l10n ) {
-	var DSPublicPostPreview = {
+	var PPrevClassicEditor = {
 		/**
 		 * Initializes the plugin.
 		 *
@@ -108,5 +108,5 @@
 	};
 
 	// Document is ready.
-	$( DSPublicPostPreview.initialize() );
-} )( window.jQuery, window.ajaxurl, window.DSPublicPostPreviewL10n );
+	$( PPrevClassicEditor.initialize() );
+} )( window.jQuery, window.ajaxurl, window.PPrevL10n );

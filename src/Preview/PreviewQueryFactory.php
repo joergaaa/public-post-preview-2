@@ -1,8 +1,11 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
-namespace PPP\Preview;
+namespace PPrev\Preview;
 
-use PPP\Contracts\LoggerInterface;
+use PPrev\Contracts\LoggerInterface;
 use WP_Query;
 
 class PreviewQueryFactory {

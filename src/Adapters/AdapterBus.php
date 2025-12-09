@@ -1,9 +1,12 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
-namespace PPP\Adapters;
+namespace PPrev\Adapters;
 
-use PPP\Contracts\LoggerInterface;
-use PPP\Preview\PreviewContext;
+use PPrev\Contracts\LoggerInterface;
+use PPrev\Preview\PreviewContext;
 use WP_Query;
 
 class AdapterBus {

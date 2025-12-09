@@ -1,12 +1,15 @@
 <?php
-
 /**
- * Simple PSR-4 style autoloader for the PPP namespace.
+ * Simple PSR-4 style autoloader for the PPrev namespace.
  *
  * @package PublicPostPreview
  */
 
-namespace PPP;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+namespace PPrev;
 
 class Autoloader {
 
@@ -28,7 +31,7 @@ class Autoloader {
 		$this->prefixes[ $prefix ] = rtrim( $base_dir, DIRECTORY_SEPARATOR ) . DIRECTORY_SEPARATOR;
 
 		if ( ! spl_autoload_register( array( $this, 'autoload' ) ) ) {
-			throw new \RuntimeException( 'Unable to register PPP autoloader.' );
+			throw new \RuntimeException( 'Unable to register PPrev autoloader.' );
 		}
 	}
 

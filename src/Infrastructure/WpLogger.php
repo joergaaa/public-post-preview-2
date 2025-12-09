@@ -1,8 +1,11 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
-namespace PPP\Infrastructure;
+namespace PPrev\Infrastructure;
 
-use PPP\Contracts\LoggerInterface;
+use PPrev\Contracts\LoggerInterface;
 
 /**
  * Basic logger that writes to error_log with a PPP prefix.
@@ -15,7 +18,12 @@ class WpLogger implements LoggerInterface {
 	private $log_file;
 
 	public function __construct( $log_file = null ) {
-		$this->log_file = $log_file ?: dirname( __DIR__, 2 ) . '/preview-debug.log';
+		if ( $log_file ) {
+			$this->log_file = $log_file;
+		} else {
+			$upload_dir = wp_upload_dir();
+			$this->log_file = $upload_dir['basedir'] . '/public-post-preview/preview-debug.log';
+		}
 	}
 
 	/**
@@ -59,8 +67,16 @@ class WpLogger implements LoggerInterface {
 			empty( $context ) ? '' : wp_json_encode( $context )
 		);
 
+		$log_dir = dirname( $this->log_file );
+
+		// Create directory if it doesn't exist.
+		if ( ! is_dir( $log_dir ) ) {
+			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_mkdir -- Direct filesystem access needed for debug logging.
+			wp_mkdir_p( $log_dir );
+		}
+
 		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_is_writable -- Direct filesystem access needed for debug logging.
-		if ( $this->log_file && is_writable( dirname( $this->log_file ) ) ) {
+		if ( $this->log_file && is_writable( $log_dir ) ) {
 			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_file_put_contents -- Direct filesystem access needed for debug logging.
 			file_put_contents( $this->log_file, $entry . PHP_EOL, FILE_APPEND );
 		} else {

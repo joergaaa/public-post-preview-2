@@ -1,10 +1,13 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
-namespace PPP\Preview;
+namespace PPrev\Preview;
 
-use PPP\Contracts\LoggerInterface;
-use PPP\Repository\PreviewTokenRepository;
-use PPP\Security\PreviewNonceValidator;
+use PPrev\Contracts\LoggerInterface;
+use PPrev\Repository\PreviewTokenRepository;
+use PPrev\Security\PreviewNonceValidator;
 use WP_Post;
 
 class PreviewResolver {

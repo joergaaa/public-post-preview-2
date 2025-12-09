@@ -1,6 +1,9 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
-namespace PPP\Preview;
+namespace PPrev\Preview;
 
 use WP_Post;
 

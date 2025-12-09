@@ -1,0 +1,36 @@
+# Files to exclude from plugin distribution
+# Use with: wp dist-archive
+
+# Version control
+.git
+.gitignore
+.distignore
+
+# Development files
+node_modules/
+js/src/
+package.json
+package-lock.json
+
+# Documentation (development only)
+docs/
+
+# Debug/logs
+*.log
+
+# Editor config
+.vscode/
+.idea/
+*.code-workspace
+
+# CI/CD
+.github/
+.gitlab-ci.yml
+.travis.yml
+
+# Tests
+tests/
+phpunit.xml
+phpunit.xml.dist
+phpcs.xml
+phpcs.xml.dist

@@ -1,8 +1,11 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
-namespace PPP\Adapters;
+namespace PPrev\Adapters;
 
-use PPP\Preview\PreviewContext;
+use PPrev\Preview\PreviewContext;
 use WP_Query;
 
 interface AdapterInterface {

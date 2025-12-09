@@ -1,17 +1,20 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
-namespace PPP;
+namespace PPrev;
 
-use PPP\Adapters\AdapterBus;
-use PPP\Adapters\DefaultAdapter;
-use PPP\Adapters\TagDivAdapter;
-use PPP\Contracts\LoggerInterface;
-use PPP\Infrastructure\WpLogger;
-use PPP\Preview\PreviewController;
-use PPP\Preview\PreviewQueryFactory;
-use PPP\Preview\PreviewResolver;
-use PPP\Repository\PreviewTokenRepository;
-use PPP\Security\PreviewNonceValidator;
+use PPrev\Adapters\AdapterBus;
+use PPrev\Adapters\DefaultAdapter;
+use PPrev\Adapters\TagDivAdapter;
+use PPrev\Contracts\LoggerInterface;
+use PPrev\Infrastructure\WpLogger;
+use PPrev\Preview\PreviewController;
+use PPrev\Preview\PreviewQueryFactory;
+use PPrev\Preview\PreviewResolver;
+use PPrev\Repository\PreviewTokenRepository;
+use PPrev\Security\PreviewNonceValidator;
 
 class Plugin {
 
@@ -42,9 +45,8 @@ class Plugin {
 	 * @return LoggerInterface
 	 */
 	private static function make_logger() {
-		$log_file = dirname( __DIR__ ) . '/preview-debug.log';
-
-		return new WpLogger( $log_file );
+		// Let WpLogger use default uploads directory path.
+		return new WpLogger();
 	}
 }
 

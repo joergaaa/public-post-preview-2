@@ -1,5 +1,16 @@
 # Changelog
 
+## 4.0.1 (2025-12-09)
+* Security: Add proper `sanitize_callback` to `register_setting()` for expiration time option.
+* Security: Improve nonce sanitization with `sanitize_text_field()` in addition to `wp_unslash()`.
+* Security: Change direct file access check from `class_exists('WP')` to `defined('ABSPATH')`.
+* Security: Add ABSPATH checks to all PHP files in `src/` directory.
+* Code Quality: Rename namespace from `PPP` to `PPrev` (4+ character prefix per WordPress guidelines).
+* Code Quality: Rename class from `DS_Public_Post_Preview` to `PPrev_Public_Post_Preview`.
+* Code Quality: Rename JavaScript globals from `DSPublicPostPreview*` to `PPrev*`.
+* Code Quality: Rename filters from `ppp_*` to `pprev_*` (`pprev_nonce_life`, `pprev_post_types`, `pprev_published_statuses`, `pprev_preview_link`).
+* Improvement: Move debug log location from plugin directory to `wp-content/uploads/`.
+
 ## 4.0.0 (2025-11-17)
 * Rewrite preview pipeline with modular services (resolver, query factory, adapter bus) and enable TagDiv adapter support by default.
 * Replace legacy option flow with service-oriented architecture; old `posts_results`-based swapping is removed from the frontend path.

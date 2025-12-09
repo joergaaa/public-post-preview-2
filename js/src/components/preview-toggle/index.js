@@ -23,7 +23,7 @@ import { store as editorStore, PluginPreviewMenuItem } from '@wordpress/editor';
 import { copySmall, seen } from '@wordpress/icons';
 import { store as coreStore } from '@wordpress/core-data';
 
-const { ajaxurl, DSPublicPostPreviewData } = window;
+const { ajaxurl, PPrevData } = window;
 
 const pluginPostStatusInfoRow = css`
 	flex-direction: column;
@@ -112,8 +112,8 @@ class PreviewToggle extends Component {
 		super( props );
 
 		this.state = {
-			previewEnabled: DSPublicPostPreviewData.previewEnabled,
-			previewUrl: DSPublicPostPreviewData.previewUrl,
+			previewEnabled: PPrevData.previewEnabled,
+			previewUrl: PPrevData.previewUrl,
 		};
 
 		this.previewUrlInput = createRef();
@@ -179,7 +179,7 @@ class PreviewToggle extends Component {
 
 	sendRequest( data ) {
 		data.append( 'action', 'public-post-preview' );
-		data.append( '_ajax_nonce', DSPublicPostPreviewData.nonce );
+		data.append( '_ajax_nonce', PPrevData.nonce );
 		return window.fetch( ajaxurl, {
 			method: 'POST',
 			body: data,

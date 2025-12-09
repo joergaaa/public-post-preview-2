@@ -1,6 +1,9 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
-namespace PPP\Security;
+namespace PPrev\Security;
 
 class PreviewNonceValidator {
 
@@ -34,10 +37,10 @@ class PreviewNonceValidator {
 	}
 
 	/**
-	 * Mirrors DS_Public_Post_Preview::nonce_tick().
+	 * Mirrors PPrev_Public_Post_Preview::nonce_tick().
 	 *
 	 * Uses the same logic as the legacy implementation to ensure compatibility.
-	 * The `ppp_nonce_life` filter can be used to customize the nonce lifetime.
+	 * The `pprev_nonce_life` filter can be used to customize the nonce lifetime.
 	 *
 	 * @return int
 	 */
@@ -49,8 +52,8 @@ class PreviewNonceValidator {
 		}
 
 		// Apply filter to allow customization of nonce lifetime (in seconds).
-		// Example: add_filter( 'ppp_nonce_life', function() { return 5 * DAY_IN_SECONDS; } );
-		$nonce_life = apply_filters( 'ppp_nonce_life', $expiration * HOUR_IN_SECONDS );
+		// Example: add_filter( 'pprev_nonce_life', function() { return 5 * DAY_IN_SECONDS; } );
+		$nonce_life = apply_filters( 'pprev_nonce_life', $expiration * HOUR_IN_SECONDS );
 
 		return ceil( time() / ( $nonce_life / 2 ) );
 	}

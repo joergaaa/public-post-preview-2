@@ -1,6 +1,9 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
-namespace PPP\Repository;
+namespace PPrev\Repository;
 
 /**
  * Temporary repository that still relies on the legacy option storage.

@@ -1,10 +1,13 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
-namespace PPP\Preview;
+namespace PPrev\Preview;
 
-use PPP\Adapters\AdapterBus;
-use PPP\Contracts\LoggerInterface;
-use PPP\Preview\PreviewRequest;
+use PPrev\Adapters\AdapterBus;
+use PPrev\Contracts\LoggerInterface;
+use PPrev\Preview\PreviewRequest;
 use WP;
 use WP_Query;
 

@@ -9,3 +9,6 @@
 # Node/Composer (if you ever use them later)
 node_modules/
 vendor/
+
+# Debug logs
+*.log

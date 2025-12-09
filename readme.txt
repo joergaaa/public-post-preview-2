@@ -1,7 +1,7 @@
 === Public Post Preview 2 ===
 Contributors: joerga, ocean90
 Tags: public, preview, posts, drafts, sharing
-Stable tag: 4.0.0
+Stable tag: 4.0.1
 Requires at least: 6.5
 Tested up to: 6.8
 Requires PHP: 8.0
@@ -97,10 +97,10 @@ Simply uncheck the **"Enable public preview"** checkbox or toggle in the editor.
 
 **Via Code (Filter):**
 
-You can customize the expiration time programmatically using the `ppp_nonce_life` filter:
+You can customize the expiration time programmatically using the `pprev_nonce_life` filter:
 
 ```php
-add_filter( 'ppp_nonce_life', function() {
+add_filter( 'pprev_nonce_life', function() {
     return 5 * DAY_IN_SECONDS; // 5 days
 } );
 ```
@@ -123,7 +123,7 @@ The plugin generates URLs with expiring nonces for security. By default, a previ
 
 To extend the expiration time:
 * Go to **Settings > Reading > Public Post Preview** and increase the expiration time
-* Or use the `ppp_nonce_life` filter in your theme's `functions.php`
+* Or use the `pprev_nonce_life` filter in your theme's `functions.php`
 
 = Can I extend the nonce expiration time? =
 
@@ -140,7 +140,7 @@ Yes! You have two options:
 Add this to your theme's `functions.php` or a custom plugin:
 
 ```php
-add_filter( 'ppp_nonce_life', 'my_custom_nonce_life' );
+add_filter( 'pprev_nonce_life', 'my_custom_nonce_life' );
 function my_custom_nonce_life() {
     return 5 * DAY_IN_SECONDS; // 5 days (or any duration you need)
 }
@@ -199,6 +199,15 @@ Requires WordPress 6.5 and PHP 8.0. Adds expiration time settings and improved e
 * **Original Idea:** Jonathan Dingman
 
 == Development ==
+
+**Source Code:**
+The JavaScript source files are located in `js/src/`. The minified/compiled files in `js/dist/` are built from these sources.
+
+To build the JavaScript:
+1. Install dependencies: `npm install`
+2. Build: `npm run build`
+
+Full source code is available at: https://github.com/ocean90/public-post-preview
 
 This plugin follows WordPress coding standards and best practices:
 * PSR-4 autoloading
