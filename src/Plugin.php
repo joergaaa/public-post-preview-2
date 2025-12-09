@@ -1,9 +1,9 @@
 <?php
+namespace PPrev;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
-
-namespace PPrev;
 
 use PPrev\Adapters\AdapterBus;
 use PPrev\Adapters\DefaultAdapter;

@@ -5,11 +5,11 @@
  * @package PublicPostPreview
  */
 
+namespace PPrev;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
-
-namespace PPrev;
 
 class Autoloader {
 

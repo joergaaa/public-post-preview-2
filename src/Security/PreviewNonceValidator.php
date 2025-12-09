@@ -1,9 +1,9 @@
 <?php
+namespace PPrev\Security;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
-
-namespace PPrev\Security;
 
 class PreviewNonceValidator {
 

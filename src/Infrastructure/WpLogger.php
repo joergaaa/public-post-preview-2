@@ -1,9 +1,9 @@
 <?php
+namespace PPrev\Infrastructure;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
-
-namespace PPrev\Infrastructure;
 
 use PPrev\Contracts\LoggerInterface;
 

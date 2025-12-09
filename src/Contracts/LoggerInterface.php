@@ -1,9 +1,9 @@
 <?php
+namespace PPrev\Contracts;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
-
-namespace PPrev\Contracts;
 
 /**
  * Minimal logger contract (subset of PSR-3) so we can swap implementations later.

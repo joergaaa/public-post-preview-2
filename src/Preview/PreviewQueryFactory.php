@@ -1,9 +1,9 @@
 <?php
+namespace PPrev\Preview;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
-
-namespace PPrev\Preview;
 
 use PPrev\Contracts\LoggerInterface;
 use WP_Query;

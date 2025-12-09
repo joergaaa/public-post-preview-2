@@ -1,9 +1,9 @@
 <?php
+namespace PPrev\Adapters;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
-
-namespace PPrev\Adapters;
 
 use PPrev\Contracts\LoggerInterface;
 use PPrev\Preview\PreviewContext;
