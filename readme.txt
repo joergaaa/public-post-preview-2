@@ -3,7 +3,7 @@ Contributors: joerga, ocean90
 Tags: public, preview, posts, drafts, sharing
 Stable tag: 4.0.1
 Requires at least: 6.5
-Tested up to: 6.8
+Tested up to: 6.9
 Requires PHP: 8.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html

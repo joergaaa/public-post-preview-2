@@ -8,7 +8,7 @@
  * Plugin URI: https://github.com/ocean90/public-post-preview
  * Text Domain: public-post-preview-2
  * Requires at least: 6.5
- * Tested up to: 6.8.3
+ * Tested up to: 6.9
  * Requires PHP: 8.0
  * License: GPLv2 or later
  *
@@ -1038,7 +1038,7 @@ class PPrev_Public_Post_Preview {
 		}
 
 		if ( function_exists( 'do_action' ) ) {
-			do_action( '_pprev_after_setup_preview_post', $post, $active_query );
+			do_action( 'pprev_after_setup_preview_post', $post, $active_query );
 		}
 
 		// If the post has gone live, redirect to it's proper permalink.
