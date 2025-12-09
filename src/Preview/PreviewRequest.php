@@ -1,6 +1,9 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
-namespace PPP\Preview;
+namespace PPrev\Preview;
 
 use WP;
 
@@ -44,7 +47,9 @@ class PreviewRequest {
 	 * @return static
 	 */
 	public static function from_wp( WP $wp ) {
-		$token      = isset( $wp->query_vars['_ppp'] ) ? (string) $wp->query_vars['_ppp'] : null;
+		$token      = isset( $wp->query_vars['_ppp'] )
+			? sanitize_text_field( wp_unslash( (string) $wp->query_vars['_ppp'] ) )
+			: null;
 		$query_vars = is_array( $wp->query_vars ) ? $wp->query_vars : array();
 
 		return new static( $wp, $token, $query_vars );

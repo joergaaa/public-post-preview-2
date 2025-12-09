@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: Public Post Preview 2
- * Version: 4.0.0
+ * Version: 4.0.1
  * Description: Allow anonymous users to preview a post before it is published.
  * Author: Joerg Angeli
  * Author URI: https://dominikschilling.de/
@@ -33,8 +33,8 @@
 /**
  * Don't call this file directly.
  */
-if ( ! class_exists( 'WP' ) ) {
-	die();
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
 }
 
 /**
@@ -42,7 +42,7 @@ if ( ! class_exists( 'WP' ) ) {
  *
  * Inits at 'plugins_loaded' hook.
  */
-class DS_Public_Post_Preview {
+class PPrev_Public_Post_Preview {
 
 	/**
 	 * Holds data required to defer preview swaps for TagDiv Template Builder (tdb_templates) requests.
@@ -90,10 +90,11 @@ class DS_Public_Post_Preview {
 			'reading',
 			'public_post_preview_expiration_time',
 			array(
-				'show_in_rest' => true,
-				'type'         => 'integer',
-				'description'  => __( 'Default expiration time in seconds.', 'public-post-preview-2' ),
-				'default'      => 48,
+				'show_in_rest'      => true,
+				'type'              => 'integer',
+				'sanitize_callback' => 'absint',
+				'description'       => __( 'Default expiration time in seconds.', 'public-post-preview-2' ),
+				'default'           => 48,
 			)
 		);
 	}
@@ -109,7 +110,7 @@ class DS_Public_Post_Preview {
 			return;
 		}
 
-		if ( has_filter( 'ppp_nonce_life' ) ) {
+		if ( has_filter( 'pprev_nonce_life' ) ) {
 			return;
 		}
 
@@ -172,7 +173,7 @@ class DS_Public_Post_Preview {
 			$preview_enabled = self::is_public_preview_enabled( $post );
 			wp_localize_script(
 				'public-post-preview-gutenberg',
-				'DSPublicPostPreviewData',
+				'PPrevData',
 				array(
 					'previewEnabled' => $preview_enabled,
 					'previewUrl'     => $preview_enabled ? self::get_preview_link( $post ) : '',
@@ -192,7 +193,7 @@ class DS_Public_Post_Preview {
 
 			wp_localize_script(
 				'public-post-preview',
-				'DSPublicPostPreviewL10n',
+				'PPrevL10n',
 				array(
 					'enabled'  => __( 'Enabled!', 'public-post-preview-2' ),
 					'disabled' => __( 'Disabled!', 'public-post-preview-2' ),
@@ -212,7 +213,7 @@ class DS_Public_Post_Preview {
 	 */
 	public static function display_preview_state( $post_states, $post ) {
 		if ( in_array( (int) $post->ID, self::get_preview_post_ids(), true ) ) {
-			$post_states['ppp_enabled'] = sprintf(
+			$post_states['pprev_enabled'] = sprintf(
 				' %s&nbsp;<a href="%s" target="_blank" aria-label="%s"><span class="dashicons dashicons-format-links" aria-hidden="true"></span></a>',
 				__( 'Public Preview', 'public-post-preview-2' ),
 				esc_url( self::get_preview_link( $post ) ),
@@ -311,8 +312,15 @@ class DS_Public_Post_Preview {
 	 * @return string The target redirect location.
 	 */
 	public static function user_switching_redirect_to( $redirect_to, $redirect_type, $new_user, $old_user ) {
+		$redirect_nonce = isset( $_GET['pprev_user_switch_nonce'] )
+			? sanitize_text_field( wp_unslash( $_GET['pprev_user_switch_nonce'] ) )
+			: '';
+
+		if ( empty( $redirect_nonce ) || ! wp_verify_nonce( $redirect_nonce, 'pprev_user_switch_redirect' ) ) {
+			return $redirect_to;
+		}
+
 		// Sanitize GET input.
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Public query parameter from User Switching plugin, no nonce needed.
 		$post_id = isset( $_GET['redirect_to_post'] ) ? absint( wp_unslash( $_GET['redirect_to_post'] ) ) : 0;
 
 		if ( ! $post_id ) {
@@ -383,7 +391,7 @@ class DS_Public_Post_Preview {
 			}
 		}
 
-		return apply_filters( 'ppp_post_types', $viewable_post_types );
+		return apply_filters( 'pprev_post_types', $viewable_post_types );
 	}
 
 	/**
@@ -396,7 +404,7 @@ class DS_Public_Post_Preview {
 	private static function get_published_statuses() {
 		$published_statuses = array( 'publish', 'private' );
 
-		return apply_filters( 'ppp_published_statuses', $published_statuses );
+		return apply_filters( 'pprev_published_statuses', $published_statuses );
 	}
 
 	/**
@@ -445,7 +453,7 @@ class DS_Public_Post_Preview {
 	 *
 	 * The link is the home link with these parameters:
 	 *  - preview, always true (query var for core)
-	 *  - _ppp, a custom nonce, see DS_Public_Post_Preview::create_nonce()
+	 *  - _ppp, a custom nonce, see PPrev_Public_Post_Preview::create_nonce()
 	 *  - page_id or p or p and post_type to specify the post.
 	 *
 	 * @since 2.0.0
@@ -474,7 +482,7 @@ class DS_Public_Post_Preview {
 
 		$link = add_query_arg( $args, home_url( '/' ) );
 
-		return apply_filters( 'ppp_preview_link', $link, $post->ID, $post );
+		return apply_filters( 'pprev_preview_link', $link, $post->ID, $post );
 	}
 
 	/**
@@ -497,8 +505,8 @@ class DS_Public_Post_Preview {
 			return false;
 		}
 
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Nonce is verified in the next line. Nonces don't need sanitization, only verification.
-		$nonce = isset( $_POST['public_post_preview_wpnonce'] ) ? wp_unslash( $_POST['public_post_preview_wpnonce'] ) : '';
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce is verified in the next line.
+		$nonce = isset( $_POST['public_post_preview_wpnonce'] ) ? sanitize_text_field( wp_unslash( $_POST['public_post_preview_wpnonce'] ) ) : '';
 		if ( empty( $nonce ) || ! wp_verify_nonce( $nonce, 'public-post-preview_' . $post_id ) ) {
 			return false;
 		}
@@ -720,7 +728,14 @@ class DS_Public_Post_Preview {
 			return false;
 		}
 
-		if ( ! self::verify_nonce( get_query_var( '_ppp' ), 'public_post_preview_' . $post_id ) ) {
+		$nonce = get_query_var( '_ppp' );
+		if ( is_string( $nonce ) ) {
+			$nonce = sanitize_text_field( wp_unslash( $nonce ) );
+		} else {
+			$nonce = '';
+		}
+
+		if ( ! self::verify_nonce( $nonce, 'public_post_preview_' . $post_id ) ) {
 			wp_die( esc_html( __( 'This link has expired!', 'public-post-preview-2' ) ), 403 );
 		}
 
@@ -1023,7 +1038,7 @@ class DS_Public_Post_Preview {
 		}
 
 		if ( function_exists( 'do_action' ) ) {
-			do_action( '_ppp_after_setup_preview_post', $post, $active_query );
+			do_action( '_pprev_after_setup_preview_post', $post, $active_query );
 		}
 
 		// If the post has gone live, redirect to it's proper permalink.
@@ -1394,11 +1409,17 @@ class DS_Public_Post_Preview {
 	 * @param array  $context Optional context data.
 	 */
 	private static function log_preview_debug( $message, array $context = array() ) {
-		$log_file = plugin_dir_path( __FILE__ ) . 'preview-debug.log';
-		$log_dir  = dirname( $log_file );
+		$upload_dir = wp_upload_dir();
+		$log_dir    = $upload_dir['basedir'] . '/public-post-preview';
+		$log_file   = $log_dir . '/preview-debug.log';
+
+		// Create directory if it doesn't exist.
+		if ( ! is_dir( $log_dir ) ) {
+			wp_mkdir_p( $log_dir );
+		}
 
 		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_is_writable -- Direct filesystem access needed for debug logging.
-		if ( ! is_dir( $log_dir ) || ! is_writable( $log_dir ) ) {
+		if ( ! is_writable( $log_dir ) ) {
 			return;
 		}
 
@@ -1446,7 +1467,7 @@ class DS_Public_Post_Preview {
 	 */
 	private static function nonce_tick() {
 		$expiration = get_option( 'public_post_preview_expiration_time' ) ?: 48;
-		$nonce_life = apply_filters( 'ppp_nonce_life', $expiration * HOUR_IN_SECONDS );
+		$nonce_life = apply_filters( 'pprev_nonce_life', $expiration * HOUR_IN_SECONDS );
 
 		return ceil( time() / ( $nonce_life / 2 ) );
 	}
@@ -1540,27 +1561,27 @@ class DS_Public_Post_Preview {
 	 * @since 2.9.4
 	 */
 	public static function activate() {
-		register_uninstall_hook( __FILE__, array( 'DS_Public_Post_Preview', 'uninstall' ) );
+		register_uninstall_hook( __FILE__, array( 'PPrev_Public_Post_Preview', 'uninstall' ) );
 	}
 }
 
 // Load the next-generation preview pipeline (active by default since 4.0.0).
 require_once __DIR__ . '/src/Autoloader.php';
-$ppp_autoloader = new \PPP\Autoloader();
-$ppp_autoloader->register( 'PPP', __DIR__ . '/src' );
+$pprev_autoloader = new \PPrev\Autoloader();
+$pprev_autoloader->register( 'PPrev', __DIR__ . '/src' );
 
 add_action(
 	'plugins_loaded',
 	static function() {
 		// Boot the new preview pipeline for frontend requests.
-		\PPP\Plugin::boot();
+		\PPrev\Plugin::boot();
 
 		// Initialize legacy class only for admin/AJAX functionality.
 		if ( is_admin() || wp_doing_ajax() ) {
-			DS_Public_Post_Preview::init();
+			PPrev_Public_Post_Preview::init();
 		}
 	},
 	1
 );
 
-register_activation_hook( __FILE__, array( 'DS_Public_Post_Preview', 'activate' ) );
+register_activation_hook( __FILE__, array( 'PPrev_Public_Post_Preview', 'activate' ) );
