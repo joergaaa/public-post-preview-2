@@ -1,5 +1,9 @@
 /* eslint-disable no-var, object-shorthand */
 ( function ( $, ajaxurl, l10n ) {
+	l10n = l10n || {
+		enabled: 'Enabled!',
+		disabled: 'Disabled!',
+	};
 	var PPrevClassicEditor = {
 		/**
 		 * Initializes the plugin.
