@@ -1,7 +1,7 @@
 === Public Post Preview 2 ===
 Contributors: joerga, ocean90
 Tags: public, preview, posts, drafts, sharing
-Stable tag: 4.0.1
+Stable tag: 4.0.2
 Requires at least: 6.5
 Tested up to: 6.9
 Requires PHP: 8.0

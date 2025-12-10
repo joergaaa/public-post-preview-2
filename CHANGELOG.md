@@ -1,5 +1,10 @@
 # Changelog
 
+## 4.0.2 (2025-01-XX)
+* Security: Add validation to ensure `_ppp` token exists before accessing `$_GET` parameters in `resolve_preview_post_id()` method.
+* Documentation: Enhance JavaScript source code documentation in readme.txt with clear directory structure and build instructions.
+* Documentation: Update GitHub repository URLs to point to the correct repository.
+
 ## 4.0.1 (2025-12-09)
 * Security: Add proper `sanitize_callback` to `register_setting()` for expiration time option.
 * Security: Improve nonce sanitization with `sanitize_text_field()` in addition to `wp_unslash()`.
