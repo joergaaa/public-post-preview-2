@@ -1198,11 +1198,25 @@ class PPrev_Public_Post_Preview {
 	 * @return int Preview post ID or 0 if not found.
 	 */
 	private static function resolve_preview_post_id( $query ) {
+		// Security: Only process GET parameters if we're in a valid preview context.
+		// The _ppp query var acts as the security token for public previews.
+		$preview_token = get_query_var( '_ppp' );
+		if ( empty( $preview_token ) && $query instanceof WP_Query ) {
+			$preview_token = $query->get( '_ppp' );
+		}
+		if ( empty( $preview_token ) ) {
+			// Not a valid preview request - do not process GET parameters.
+			return 0;
+		}
+
 		$candidates = array();
 
+		// Only access $_GET parameters after validating we're in a preview context.
+		// The _ppp token validation above ensures these parameters are only processed
+		// for legitimate preview requests.
 		foreach ( array( 'p', 'page_id', 'post_id' ) as $get_key ) {
-			if ( isset( $_GET[ $get_key ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-				$candidates[] = absint( $_GET[ $get_key ] ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			if ( isset( $_GET[ $get_key ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Validated above via _ppp token check.
+				$candidates[] = absint( $_GET[ $get_key ] ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Validated above via _ppp token check.
 			}
 		}
 

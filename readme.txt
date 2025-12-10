@@ -17,14 +17,14 @@ Share a secure, expiring preview link with anyone—no WordPress account require
 
 **Key Features:**
 
-* 🔗 Generate secure preview links with expiring nonces
-* ⏱️ Customizable expiration time (default: 48 hours)
-* 🎨 Works with Block Editor and Classic Editor
-* 🔒 Secure by design—no authentication needed for viewers
-* 🎯 Supports all public post types
-* 🏗️ Compatible with popular page builders (TagDiv, Elementor, etc.)
-* 📊 Preview status indicator in post list
-* ⚙️ Easy-to-use settings panel
+* Generate secure preview links with expiring nonces
+* Customizable expiration time (default: 48 hours)
+* Works with Block Editor and Classic Editor
+* Secure by design—no authentication needed for viewers
+* Supports all public post types
+* Compatible with popular page builders (TagDiv, Elementor, etc.)
+* Preview status indicator in post list
+* Easy-to-use settings panel
 
 **Perfect for:**
 
@@ -34,6 +34,9 @@ Share a secure, expiring preview link with anyone—no WordPress account require
 * Anyone needing to preview unpublished content
 
 Have you ever been writing a post with the help of someone who doesn't have access to your WordPress site and needed to give them the ability to preview it before publishing? This plugin takes care of that by generating a secure URL with an expiring nonce that can be shared for public preview.
+
+**Source Code:**
+All JavaScript source code is included in this plugin and is human-readable. The source files are located in the `js/src/` directory. Compiled/minified files are in `js/dist/` and are built from the source. The full source code is also available on [GitHub](https://github.com/joergaaa/public-post-preview-2).
 
 *Previously this plugin was maintained by [Matt Martz](http://profiles.wordpress.org/sivel/) and was an idea of [Jonathan Dingman](http://profiles.wordpress.org/jdingman/). Photo by [Annelies Geneyn](https://unsplash.com/photos/opened-book-on-grass-during-daytime-bhBONc07WsI).*
 
@@ -188,7 +191,7 @@ Requires WordPress 6.5 and PHP 8.0. Adds expiration time settings and improved e
 
 == Support ==
 
-* **GitHub Issues:** [Report bugs or request features](https://github.com/ocean90/public-post-preview/issues)
+* **GitHub Issues:** [Report bugs or request features](https://github.com/joergaaa/public-post-preview-2/issues)
 * **WordPress.org Forums:** [Get help from the community](https://wordpress.org/support/plugin/public-post-preview)
 
 == Credits ==
@@ -201,13 +204,32 @@ Requires WordPress 6.5 and PHP 8.0. Adds expiration time settings and improved e
 == Development ==
 
 **Source Code:**
-The JavaScript source files are located in `js/src/`. The minified/compiled files in `js/dist/` are built from these sources.
 
-To build the JavaScript:
+All JavaScript source code is human-readable and included in this plugin for review and modification. The plugin follows WordPress.org guidelines by including all source code alongside compiled files.
+
+**Directory Structure:**
+* **Source files:** `js/src/` - Human-readable, unminified JavaScript source code
+  * `js/src/index.js` - Main entry point for Gutenberg integration
+  * `js/src/components/preview-toggle/index.js` - React component for preview toggle
+* **Compiled files:** `js/dist/` - Production-ready, minified JavaScript (built from source)
+  * `js/dist/gutenberg-integration.js` - Compiled Gutenberg integration
+  * `js/dist/gutenberg-integration.asset.php` - Asset dependencies
+
+**Building from Source:**
+
+To rebuild the JavaScript from source, you'll need Node.js and npm:
+
 1. Install dependencies: `npm install`
 2. Build: `npm run build`
 
-Full source code is available at: https://github.com/ocean90/public-post-preview
+The compiled files in `js/dist/` are generated from the source files in `js/src/`.
+
+**Full Source Repository:**
+
+The complete source code (including PHP, JavaScript, and build configuration) is available on GitHub:
+https://github.com/joergaaa/public-post-preview-2
+
+You can review, study, fork, and contribute to the plugin on GitHub.
 
 This plugin follows WordPress coding standards and best practices:
 * PSR-4 autoloading
